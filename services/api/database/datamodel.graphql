@@ -1,0 +1,199 @@
+type User {
+  id: ID! @unique
+  createdAt: DateTime!
+  username: String! @unique
+  email: String! @unique
+  emailVerified: Boolean! @default(value: "false")
+  password: String!
+  description: String
+	website: String
+  name: String
+  country: String
+  timezone: Int
+  profilePhoto: Media
+  coverPhoto: Media
+  roles: [UserRole!]!
+  collections: [Collection!]!
+  artefacts: [Artefact!]! @relation(name: "UserCollectedArtefact")
+}
+
+type UserRole {
+  id: ID! @unique
+  user: User!
+  role: Role!
+}
+
+type Role {
+  id: ID! @unique
+  name: AvailableRoles! @unique
+  users: [UserRole!]!
+}
+
+enum AvailableRoles {
+  USER
+  CURATOR
+  ADMIN
+  OWNER
+}
+
+type Collection {
+  id: ID! @unique
+  name: String!
+  shortDescription: String
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  owner: User!
+  profilePhoto: Media
+  coverPhoto: Media
+  isPrivate: Boolean! @default(value: "false")
+  isPublished: Boolean! @default(value: "false")
+  artefacts: [Artefact!]! @relation(name: "ArtefactInCollection")
+  # userGrowth: GrowthData
+  # artefactGrowth: GrowthData
+  # topArtefacts: [Artefact]
+  # meta: CollectionMetaData!
+}
+
+type Artefact {
+  id: ID! @unique
+  name: String!
+  labelName: String! @unique
+  slug: String! @unique
+  shortDescription: String
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  collection: Collection! @relation(name: "ArtefactInCollection")
+  isPrivate: Boolean! @default(value: "false")
+  isPublished: Boolean! @default(value: "false")
+  isArchived: Boolean! @default(value: "false")
+  location: Location!
+  avatar: Media
+  coverPhoto: Media
+  script: Script! @relation(name: "ArtefactScript")
+  # userGrowth: GrowthData
+  # meta: ArtefactMeta!
+}
+
+type Media {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  filename: String!
+  localSource: String!
+  uploadUri: String
+  bucket: String
+  key: String
+  region: String
+  owner: User
+}
+
+type Location {
+  id: ID! @unique
+  country: String!
+  city: String!
+  address: String!
+  lat: Float!
+  lng: Float!
+}
+
+type Script {
+  id: ID! @unique
+  createdAt: DateTime!
+  name: String!
+  sections: [Section!]! @relation(name: "SectionInScript")
+}
+
+type Section {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  shortDescription: String
+  pages: [Page!]! @relation(name: "PageInSection")
+  deletable: Boolean! @default(value: "false")
+}
+
+type Page {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isPublished: Boolean! @default(value: "false")
+  isArchived: Boolean! @default(value: "false")
+  title: String!
+  shortDescription: String
+  content: PageContent!
+}
+
+type PageContent {
+  title: String
+  body: String
+}
+
+#
+# type ArtefactMeta {
+#   id: ID! @unique
+#   growth: Float @default(value: 0)
+#   currentPeriodCount: Int
+#   prevPeriodCount: Int
+# }
+#
+# type CollectionMetaData {
+#   id: ID! @unique
+# }
+#
+# type GrowthDataCounts {
+#   growth: Float
+#   currentPeriodCount: Int
+#   prevPeriodCount: Int
+# }
+#
+# type GrowthData {
+#   count: Int
+#   weeklyGrowth: GrowthDataCounts
+#   monthlyGrowth: GrowthDataCounts
+#   quarterlyGrowth: GrowthDataCounts
+# }
+#
+# type UsersGrowthData {
+#   count: Int
+#   dau: Int
+#   wau: Int
+#   mau: Int
+#   weeklyGrowth: GrowthDataCounts
+#   monthlyGrowth: GrowthDataCounts
+#   quarterlyGrowth: GrowthDataCounts
+# }
+#
+# type CoreMetrics {
+#   dau: Int
+#   wau: Int
+#   mau: Int
+#   dac: Int
+#   wac: Int
+#   mac: Int
+#   cpu: Float
+#   mpu: Float
+#   tpu: Float
+#   users: Int
+#   communities: Int
+#   threads: Int
+#   dmThreads: Int
+#   threadMessages: Int
+#   dmMessages: Int
+#   date: Date
+# }
+#
+# type Meta {
+#   isAdmin: Boolean
+#   usersGrowth: UsersGrowthData
+#   communitiesGrowth: GrowthData
+#   channelsGrowth: GrowthData
+#   threadsGrowth: GrowthData
+#   directMessageThreadsGrowth: GrowthData
+#   threadMessagesGrowth: GrowthData
+#   directMessagesGrowth: GrowthData
+#   coreMetrics: [CoreMetrics]
+#   topThreads: [Thread]
+# }

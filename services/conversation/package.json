@@ -1,0 +1,20 @@
+{
+  "main": "NODE_ENV=production node main.js",
+  "private": true,
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "dotenv": "^5.0.0",
+    "expo-server-sdk": "^2.3.3",
+    "koa": "^2.4.1",
+    "koa-body": "^2.5.0",
+    "koa-cors": "0.0.16",
+    "koa-helmet": "^3.3.0",
+    "koa-logger": "^3.1.0",
+    "koa-respond": "^1.0.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^4.0.2",
+    "limdu": "^0.9.4",
+    "node-fetch": "^2.1.2",
+    "watson-developer-cloud": "^3.0.5"
+  }
+}

@@ -1,0 +1,71 @@
+# import User from "../generated/prisma.graphql"
+# import Role, UserRole, AvailableRoles from "../generated/prisma.graphql"
+# import Collection, CollectionWhereInput from "../generated/prisma.graphql"
+# import Artefact, ArtefactWhereInput from "../generated/prisma.graphql"
+# import Location from "../generated/prisma.graphql"
+# import Picture from "../generated/prisma.graphql"
+
+
+type Mutation {
+  signup(username: String!, email: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+
+  createRole(name: AvailableRoles!): Role!
+  assignRole(role: AvailableRoles!, assigneeEmail: String!): UserRole!
+
+  updateUser(name: String!): User!
+
+  createCollection(name: String!, shortDescription: String!): Collection!
+  updateCollection(id: ID!, name: String!, shortDescription: String!): Collection!
+  publishCollection(id: ID!): Collection!
+  deleteCollection(id: ID!): Status!
+
+  createArtefact(data: CreateArtefactInput!): Artefact!
+  updateArtefact(id: ID!, name: String!, shortDescription: String!): Artefact!
+  deleteArtefact(id: ID!): Status!
+  publishArtefact(id: ID!): Artefact!
+
+  addArtefact(id: ID!): Artefact!
+  removeArtefact(id: ID!): Status!
+}
+
+type Subscription {
+  collectionSubscription: CollectionSubscriptionPayload!
+}
+
+type Query {
+  collections(where: CollectionWhereInput): [Collection!]!
+  collection(where: CollectionWhereInput!): Collection!
+  artefacts(where: ArtefactWhereInput!): [Artefact!]!
+  artefact(where: ArtefactWhereInput!): Artefact!
+  me: User!
+}
+
+input CreateArtefactInput {
+  name: String!
+  collectionId: String!
+  country: String!
+  city: String!
+  address: String!
+  lat: Float!
+  lng: Float!
+}
+
+type AuthPayload {
+  token: String!,
+  user: User!
+}
+
+type Status {
+  success: Boolean!
+}
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  name: String
+  roles: [UserRole!]!
+  collections: [Collection!]
+  artefacts: [Artefact!]
+}
